@@ -1,0 +1,50 @@
+1) Pull Nginx docker image from hub to VM and run the docker image
+    > docker run -it --rm -d -p 8080:80 --name mouliwebserver nginx
+
+    > docker ps -a 
+
+2) Show its webpage can be viewed
+   > curl -v localhost:8080
+
+3) Tag the image with a custom name and show all the images and docker containers running and then delete the container.
+   > docker tag 62d49f9bab97 nginx:v_1.0
+    62d49f9bab97 is the image id of nginx copied after running the command docker images -a
+
+   > docker stop mouliwebserver
+   > docker rmi -f 62d49f9bab97 
+     -f -> force delete the images as there will be 2 images with same id since we tagged it.
+
+4) Pull ubuntu docker container image and connect to the container by launching its shell and see the environment variable
+   > docker pull ubuntu
+       - This will pull the latest ubuntu image from docker hub
+   > docker run -it -d --name myubuntu ubuntu
+       - This will run the ubuntu image with the given name as myubuntu
+
+   > docker container exec -it myubuntu /bin/bash
+        -  Opens the terminal as below:
+
+        > root@626348234:/#env
+          - env command will show the environment variables
+
+5) Copy a file from the local file system to the running container.
+    > docker cp sample.txt myubuntu:/tmp
+      cp - copy command | myubuntu - name of the container
+      /tmp - the folder tmp which is inside the container
+
+    > docker container exec -it myubuntu /bin/bash
+       > root@626348234:/# cat /tmp/sample.txt
+
+6) Mount a folder from the local file system into a container in read-write mode and modify it from inside the container 
+   and then, show the modified file from local file system;
+   > docker run -d -it --name myubuntu --mount type=bind,source=c:/Mouli/usecase1,target=/tmp ubuntu
+     -- mount -> contains the key-value pair seperated by comma
+   > docker container exec -it myubuntu /bin/bash
+     -- goto /tmp folder and edit a file and exit the container
+     -- cat the file and display the content
+
+7) Delete all the containers and images
+   > docker stop myubuntu
+   > docker rmi 7e029101910
+
+
+ 
